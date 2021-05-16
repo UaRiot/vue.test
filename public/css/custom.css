@@ -1,0 +1,24 @@
+.shipment-create-modal {
+    position: absolute;
+    top: calc(50% - 100px);
+    left: calc(50% - 100px);
+    background-color: white;
+    padding: 20px;
+    border: 1px solid;
+    z-index: 2;
+}
+
+.error_text {
+    color: red;
+    font-weight: bold;
+}
+
+.modal-background {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: gray;
+    left: 0px;
+    top: 0px;
+    opacity: 0.5
+}
