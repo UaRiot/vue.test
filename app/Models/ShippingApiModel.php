@@ -99,7 +99,7 @@ class ShippingApiModel extends Model
 
     public function deleteItem($token, $id)
     {
-        $curl = curl_init($this->base_url . 'item?token=' . $token);
+        $curl = curl_init($this->base_url . 'item/'.$id.'?token=' . $token);
         $data = json_encode(['id' => $id]);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
