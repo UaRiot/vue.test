@@ -53,11 +53,12 @@ class ShippingApiModel extends Model
         }
     }
 
-    public function updateShipment($id, $name)
+    public function updateShipment($token, $id, $name)
     {
-        $curl = curl_init($this->base_url . 'login');
-        //$data = json_encode(['email' => $email, 'password' => $password]);
+        $curl = curl_init($this->base_url . 'shipment/'. $id. '?token=' . $token);
+        $data = json_encode(['id' => $id, 'name' => $name]);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         $result = curl_exec($curl);
@@ -67,7 +68,7 @@ class ShippingApiModel extends Model
 
     public function deleteShipment($token, $id)
     {
-        $curl = curl_init($this->base_url . 'shipment?token=' . $token);
+        $curl = curl_init($this->base_url . 'shipment/'. $id. '?token=' . $token);
         $data = json_encode(['id' => $id]);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
@@ -102,6 +103,27 @@ class ShippingApiModel extends Model
         $data = json_encode(['id' => $id]);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($curl);
+        curl_close($curl);
+        return $result;
+    }
+
+
+    public function updateItem($token, $id, $shipment_id, $name, $code)
+    {
+        $curl = curl_init($this->base_url . 'item/'. $id. '?token=' . $token);
+        $data = json_encode(
+            [
+                'id' => $id,
+                'name' => $name,
+                'code'=> $code,
+                'shipment_id' => $shipment_id
+            ]
+        );
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         $result = curl_exec($curl);

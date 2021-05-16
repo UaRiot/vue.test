@@ -35,10 +35,10 @@
                                     <shipment-card
                                         :shipment="shipment"
                                         v-on:start-item-creation="startItemCreation"
-                                        v-on:start-shipment-update="startItemCreation"
                                         v-on:start-shipment-delete="deleteShipment"
                                         v-on:start-item-delete="deleteItem"
-                                        v-on:start-item-update="startItemCreation"
+                                        v-on:start-shipment-update="startShipmentUpdate"
+                                        v-on:start-item-update="startItemUpdate"
                                     ></shipment-card>
                                 </div>
                             </div>
@@ -61,16 +61,16 @@
             </div>
         </div>
         <!--   UPDATE SHIPMENT MODAL     -->
-        <div class="modal-background" v-if="createShipmentData.openModal" @click="createShipmentData.openModal = false"></div>
-        <div class="shipment-create-modal" v-if="createShipmentData.openModal">
+        <div class="modal-background" v-if="updateShipmentData.openModal" @click="updateShipmentData.openModal = false"></div>
+        <div class="shipment-create-modal" v-if="updateShipmentData.openModal">
             <div class="form-group text-center">
-                <div v-if="createShipmentData.hasError">
-                    <error-block :error_text="createShipmentData.errorText"></error-block>
+                <div v-if="updateShipmentData.hasError">
+                    <error-block :error_text="updateShipmentData.errorText"></error-block>
                 </div>
                 <label for="createShipmentName">Shipment name</label>
                 <input type="text" class="form-control" id="createShipmentName"
-                       v-model="createShipmentData.shipmentName">
-                <button @click="createShipment" class="btn btn-success mt-3">Create</button>
+                       v-model="updateShipmentData.shipmentName">
+                <button @click="updateShipment" class="btn btn-success mt-3">Update</button>
             </div>
         </div>
 
@@ -80,14 +80,30 @@
             <div class="form-group text-center">
                 <div v-if="createItemData.hasError">
                     <error-block :error_text="createItemData.errorText"></error-block>
-                </div>
+                </div>Create
                 <label for="createItemName">Item name</label>
                 <input type="text" class="form-control" id="createItemName"
                        v-model="createItemData.itemName">
                 <label for="createItemCode">Item code</label>
                 <input type="text" class="form-control" id="createItemCode"
                        aria-describedby="emailHelp" v-model="createItemData.code">
-                <button @click="createItem" class="btn btn-success mt-3">Create</button>
+                <button @click="createItem" class="btn btn-success mt-3">Update</button>
+            </div>
+        </div>
+        <!--   CREATE ITEM MODAL     -->
+        <div class="modal-background" v-if="updateItemData.openModal" @click="updateItemData.openModal = false"></div>
+        <div class="shipment-create-modal" v-if="updateItemData.openModal">
+            <div class="form-group text-center">
+                <div v-if="updateItemData.hasError">
+                    <error-block :error_text="updateItemData.errorText"></error-block>
+                </div>Create
+                <label for="createItemName">Item name</label>
+                <input type="text" class="form-control" id="createItemName"
+                       v-model="updateItemData.itemName">
+                <label for="createItemCode">Item code</label>
+                <input type="text" class="form-control" id="createItemCode"
+                       aria-describedby="emailHelp" v-model="updateItemData.code">
+                <button @click="updateItem" class="btn btn-success mt-3">Update</button>
             </div>
         </div>
     </div>

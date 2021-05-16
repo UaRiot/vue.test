@@ -59,8 +59,14 @@ class ShippingController extends Controller
     public function updateShipment(Request $request) {
         $validation = $request->validate([
             'token' => 'required|min:10',
-            'name' => 'required'
+            'shipment_name' => 'required',
+            'shipment_id' => 'required',
         ]);
+        $this->shippingApiModel->updateShipment(
+            $request->input('token'),
+            $request->input('shipment_id'),
+            $request->input('shipment_name')
+        );
     }
 
     public function deleteShipment(Request $request) {
@@ -92,8 +98,18 @@ class ShippingController extends Controller
     public function updateItem(Request $request) {
         $validation = $request->validate([
             'token' => 'required|min:10',
-            'name' => 'required'
+            'item_id' => 'required',
+            'shipment_id' => 'required',
+            'item_name' => 'required',
+            'item_code' => 'required'
         ]);
+        $this->shippingApiModel->updateItem(
+            $request->input('token'),
+            $request->input('item_id'),
+            $request->input('shipment_id'),
+            $request->input('item_name'),
+            $request->input('item_code'),
+        );
     }
 
     public function deleteItem(Request $request) {

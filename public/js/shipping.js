@@ -11,16 +11,16 @@ Vue.component(
                 this.$emit('start-item-creation', this.shipment.id);
             },
             shipmentUpdate: function () {
-                this.$emit('start-shipment-update', this.shipment.id);
+                this.$emit('start-shipment-update', this.shipment);
             },
             shipmentDelete: function () {
-                this.$emit('start-shipment-delete', this.shipment);
+                this.$emit('start-shipment-delete', this.shipment.id);
             },
             startItemDelete: function (item_id) {
                 this.$emit('start-item-delete', item_id);
             },
             startItemUpdate: function (item){
-                this.$emit('start-item-update', item_id);
+                this.$emit('start-item-update', item);
             }
         },
         template: `<div class="card col-12" >
@@ -56,7 +56,7 @@ Vue.component(
         },
         methods: {
             itemUpdate: function () {
-                this.$emit('start-item-delete', this.item);
+                this.$emit('start-item-update', this.item);
             },
             itemDelete: function () {
                 this.$emit('start-item-delete', this.item.id);
@@ -102,6 +102,7 @@ var app = new Vue({
             updateShipmentData: {
                 openModal: false,
                 shipmentName: "",
+                shipmentID: "",
                 hasError: false,
                 errorText: "",
             },
@@ -116,6 +117,7 @@ var app = new Vue({
             updateItemData: {
                 openModal: false,
                 itemName: "",
+                itemID: "",
                 shipmentID: "",
                 code: "",
                 hasError: false,
@@ -236,43 +238,60 @@ var app = new Vue({
                     app.getShipmentList();
                 });
             },
-            updateItem: function (item) {
-                if (this.createItemData.itemName == "" || this.createItemData.code == ""){
-                    this.createItemData.hasError = true;
-                    this.createItemData.errorText = "Need enter item name or code";
+            startShipmentUpdate: function (shipment) {
+                this.updateShipmentData.shipmentName = shipment.name;
+                this.updateShipmentData.shipmentID = shipment.id;
+                this.updateShipmentData.openModal = true;
+            },
+            startItemUpdate: function (item) {
+                console.log(item);
+                this.updateItemData.itemName = item.name;
+                this.updateItemData.code = item.code;
+                this.updateItemData.itemID = item.id;
+                this.updateItemData.shipmentID = item.shipment_id;
+                this.updateItemData.openModal = true;
+            },
+            updateItem: function () {
+                if (this.updateItemData.itemName == "" || this.updateItemData.code == ""){
+                    this.updateItemData.hasError = true;
+                    this.updateItemData.errorText = "Need enter item name or code";
                 }
                 let data = new FormData;
                 data.append('_token', window._token);
                 data.append('token', this.token.token);
-                data.append('item_id', item_id);
-                fetch('/item_delete', {
+                data.append('item_id', this.updateItemData.itemID);
+                data.append('shipment_id', this.updateItemData.shipmentID);
+                data.append('item_name', this.updateItemData.itemName);
+                data.append('item_code', this.updateItemData.code);
+                fetch('/item_update', {
                     method: 'POST',
                     body: data
                 }).then((resp) => resp.json()).then(function (status) {
-                    app.createItemData.openModal = false;
+                    app.updateItemData.openModal = false;
                     app.getShipmentList();
                 }).catch(function (error) {
-                    app.createShipmentData.openModal = false;
+                    app.updateItemData.openModal = false;
                     app.getShipmentList();
                 });
             },
-            updateShipment: function (shipment) {
-                if (this.createItemData.itemName == "" || this.createItemData.code == ""){
-                    this.createItemData.hasError = true;
-                    this.createItemData.errorText = "Need enter item name or code";
+            updateShipment: function () {
+                if (this.updateShipmentData.shipmentName == ""){
+                    this.updateShipmentData.hasError = true;
+                    this.updateShipmentData.errorText = "Need enter item name";
                 }
                 let data = new FormData;
                 data.append('_token', window._token);
                 data.append('token', this.token.token);
-                data.append('item_id', item_id);
-                fetch('/item_delete', {
+                data.append('shipment_id', this.updateShipmentData.shipmentID);
+                data.append('shipment_name', this.updateShipmentData.shipmentName);
+                fetch('/shipment_update', {
                     method: 'POST',
                     body: data
                 }).then((resp) => resp.json()).then(function (status) {
-                    app.createItemData.openModal = false;
+                    app.updateShipmentData.openModal = false;
                     app.getShipmentList();
                 }).catch(function (error) {
-                    app.createShipmentData.openModal = false;
+                    app.updateShipmentData.openModal = false;
                     app.getShipmentList();
                 });
             },
